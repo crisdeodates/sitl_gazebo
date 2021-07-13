@@ -199,6 +199,7 @@ include_directories(
 if (GSTREAMER_FOUND)
   include_directories(
     ${GSTREAMER_INCLUDE_DIRS}
+    ${GSTREAMER_APP_INCLUDE_DIRS}
   )
 endif()
 
@@ -213,6 +214,7 @@ link_libraries(
 if (GSTREAMER_FOUND)
   link_libraries(
     ${GSTREAMER_LIBRARIES}
+    ${GSTREAMER_APP_LIBRARIES}
     ${GLIB_LDFLAGS}
     gobject-2.0
   )
@@ -309,7 +311,10 @@ set(mav_msgs
   msgs/MotorSpeed.proto
   )
 set(nav_msgs msgs/Odometry.proto)
-set(physics_msgs msgs/Wind.proto)
+set(physics_msgs
+    msgs/Force.proto
+    msgs/Wind.proto
+    )
 set(std_msgs msgs/Int32.proto)
 set(sensor_msgs
   msgs/Airspeed.proto
@@ -463,6 +468,9 @@ set(plugins
 #if("${GAZEBO_VERSION}" VERSION_LESS "7.0")
   add_library(LiftDragPlugin SHARED src/liftdrag_plugin/liftdrag_plugin.cpp)
   list(APPEND plugins LiftDragPlugin)
+
+  add_library(ForceVisual SHARED src/force_visual/force_visual.cpp)
+  list(APPEND plugins ForceVisual)
 #endif()
 
 foreach(plugin ${plugins})
